@@ -74,7 +74,7 @@ void printGLError()
 }
 
 #define LAYERS 20
-#define BOXES 5000
+#define BOXES 2500
 #define WIDTH 640
 #define HEIGHT 480
 
