@@ -104,7 +104,6 @@ void initVBO()
             glGenBuffersARB(1, &vboId_vertex[i]); 
             if (glIsBufferARB(vboId_vertex[i]))
             {
-                fprintf(stderr, "created buffer %i\n", i);
             }
             else
             {
@@ -114,7 +113,6 @@ void initVBO()
             glGenBuffersARB(1, &vboId_texture[i]); 
             if (glIsBufferARB(vboId_texture[i]))
             {
-                fprintf(stderr, "created buffer %i\n", i);
             }
             else
             {
@@ -124,7 +122,6 @@ void initVBO()
             glGenBuffersARB(1, &vboId_color[i]); 
             if (glIsBufferARB(vboId_vertex[i]))
             {
-                fprintf(stderr, "created buffer %i\n", i);
             }
             else
             {
@@ -146,7 +143,7 @@ void renderRetained()
 {
     glClear(GL_COLOR_BUFFER_BIT);
     glLoadIdentity();
-
+    glTranslatef(WIDTH/2, HEIGHT/2, 0.0f);    
 
 
     glEnableClientState(GL_COLOR_ARRAY);
@@ -164,9 +161,9 @@ void renderRetained()
         Box* p = layer[i].first;
         while(p != NULL)
         {
-            rot = p->rot * (3.1456f / 180.0f);
+            rot = -p->rot * (3.1456f / 180.0f);
             rotx = p->x * cosf(rot) + p->y * sinf(rot);
-            roty = - (p->y * sinf(rot)) + p->x * cosf(rot);
+            roty = - (p->x * sinf(rot)) + p->y * cosf(rot);
         
             vertices[j * 8 + 0] = rotx - p->size;  
             vertices[j * 8 + 1] = roty - p->size;
@@ -189,10 +186,10 @@ void renderRetained()
             int k;
             for (k = 0; k <4; k++)
             {   
-                colors[j * 16 + k * 4 + 0] = (float)((i + 6) * (j+1))/(float)(LAYERS*BOXES);    
-                colors[j * 16 + k * 4 + 1] = (float)((i + 4) * (j+1))/(float)(LAYERS*BOXES);    
+                colors[j * 16 + k * 4 + 0] = (float)((i + 10) * (j+1))/(float)(LAYERS*BOXES);    
+                colors[j * 16 + k * 4 + 1] = (float)((i + 5) * (j+1))/(float)(LAYERS*BOXES);    
                 colors[j * 16 + k * 4 + 2] = (float)((i + 1) * (j+1))/(float)(LAYERS*BOXES);    
-                colors[j * 16 + k * 4 + 3] = 0.2;                  
+                colors[j * 16 + k * 4 + 3] = 0.5;                  
             }
             
             j++;
@@ -246,7 +243,7 @@ void renderImmediate()
     glClear(GL_COLOR_BUFFER_BIT);
   
     glLoadIdentity();
-    
+    glTranslatef(WIDTH/2, HEIGHT/2, 0.0f);    
     int j;
     int i;
     for (i = 0; i < LAYERS; i++)
@@ -257,7 +254,7 @@ void renderImmediate()
         {
             glPushMatrix();
             //glLoadIdentity();
-            glColor4f((float)((i + 6) * (j+1))/(float)(LAYERS*BOXES), (float)((i + 4) * (j+1))/(float)(LAYERS*BOXES), (float)((i + 1) * (j+1))/(float)(LAYERS*BOXES), 0.2);
+            glColor4f((float)((i + 10) * (j+1))/(float)(LAYERS*BOXES), (float)((i + 5) * (j+1))/(float)(LAYERS*BOXES), (float)((i + 1) * (j+1))/(float)(LAYERS*BOXES), 0.5);
             //glTranslatef(p->x, p->y, 0.0f);     
             glRotatef(p->rot, 0.0f, 0.0f, 1.0f);    
             
@@ -291,7 +288,7 @@ void generateLayers()
     {
         for (j = 0; j < BOXES; j++)
         {     
-            Layer_addBox(&layer[i], Box_new(myRandom(WIDTH), myRandom(HEIGHT), myRandom(i*j) * 4, myRandom(5) + 2));
+            Layer_addBox(&layer[i], Box_new(myRandom(WIDTH), myRandom(HEIGHT), myRandom(i*j) * 4, myRandom(10) + 5));
             //Layer_addBox(&layer[i], Box_new(0, 0, 0, 50));         
         }
     }
@@ -305,8 +302,6 @@ static int GLFWCALL closeWindowCallBack(void* data)
 
 void Graphics_init()
 {
-    fprintf(stderr, "gl errors: %i, %i, %i, %i, %i, %i\n",  GL_INVALID_ENUM,  GL_INVALID_VALUE, GL_INVALID_OPERATION, GL_STACK_OVERFLOW,  GL_STACK_UNDERFLOW,   GL_OUT_OF_MEMORY);
-
 	glfwInit();
 	glfwOpenWindow(WIDTH, HEIGHT, 0, 0, 0, 0, 0, 0, GLFW_WINDOW);
 	glfwSetWindowCloseCallback(&closeWindowCallBack, NULL);
@@ -320,7 +315,8 @@ void Graphics_init()
 	//glLoadIdentity();
     glEnable(GL_BLEND);
     glDisable(GL_DEPTH_TEST);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE);
     glClearColor(0,0,0,1);
     glClear(GL_COLOR_BUFFER_BIT);
     printGLError();
