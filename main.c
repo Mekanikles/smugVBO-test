@@ -344,7 +344,7 @@ void Graphics_init()
 int main()
 {
 
-    fprintf(stderr, "Running smug VBO test.\n");
+    fprintf(stderr, "Running smug VBO test. Switch rendering mode with F1 and F2\n");
     
     Graphics_init();
    
